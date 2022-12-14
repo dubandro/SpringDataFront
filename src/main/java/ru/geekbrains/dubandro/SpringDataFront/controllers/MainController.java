@@ -1,6 +1,7 @@
 package ru.geekbrains.dubandro.SpringDataFront.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,18 +22,19 @@ public class MainController {
     private final ProductService productService;
     private final CategoryService categoryService;
 
-    //old method
     @GetMapping("/products")
     @ResponseBody
-    public List<ProductDto> findAll(
-            @RequestParam(required = false) Double minPrice,
-            @RequestParam(required = false) Double maxPrice
-    ) {
+    public Page<ProductDto> productToCriteria(
+            @RequestParam(name = "min", required = false) Double minPrice,
+            @RequestParam(name = "max", required = false) Double maxPrice,
+            @RequestParam(name = "title", required = false) String partTitle,
+            @RequestParam(name = "p", defaultValue = "1") int pageIndex) {
+        if (pageIndex < 1) {
+            pageIndex = 1;
+        }
         return productService
-                .findAll(minPrice, maxPrice)
-                .stream()
-                .map(ProductDto::new)
-                .collect(Collectors.toList());
+                .findProducts(pageIndex, minPrice, maxPrice, partTitle)
+                .map(ProductDto::new);
     }
 
     @GetMapping("/market-map")
@@ -88,6 +90,20 @@ public class MainController {
     /**
      * Old methods for json use
      */
+
+    //old method
+    @GetMapping("/json/products")
+    @ResponseBody
+    public List<ProductDto> findAll(
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice
+    ) {
+        return productService
+                .findAll(minPrice, maxPrice)
+                .stream()
+                .map(ProductDto::new)
+                .collect(Collectors.toList());
+    }
 
     //old method
     @GetMapping("/json/{id}")
