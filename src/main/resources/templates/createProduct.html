@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>create product</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+  <h2>add product to catalog</h2>
+  <p></p>
+  <form class="row g-3" method="post" th:action="@{'/create-product'}">
+      <div class="col-auto">
+<!--          <label for="title" class="visually-hidden">title</label>-->
+          <input type="text" name="title" class="form-control" id="title" placeholder="title">
+      </div>
+      <div class="col-auto">
+<!--          <label for="price" class="visually-hidden">price</label>-->
+          <input type="number" name="price" class="form-control" id="price" placeholder="price">
+      </div>
+      <div class="col-auto">
+<!--          <label for="category_id" class="visually-hidden">category_id</label>-->
+          <input type="number" name="category_id" class="form-control" id="category_id" placeholder="category_id">
+      </div>
+      <div class="col-auto">
+          <button type="submit" class="btn btn-outline-primary mb-3">add</button>
+      </div>
+  </form>
+
+  <p></p>
+  <div class="btn-group" role="group" aria-label="btn_footer">
+    <a th:href="@{'/market-map'}" class="btn btn-outline-primary">market map</a>
+    <a th:href="@{'/'}" class="btn btn-outline-primary">return to catalog</a>
+  </div>
+</div>
+</body>
+</html>

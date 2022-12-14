@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>product</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<div class="container">
+    <h2>product info</h2>
+    <h4 th:text="${'id: ' + product.id}"></h4>
+    <h4 th:text="${'title: ' + product.title}"></h4>
+    <h4 th:text="${'price: ' + product.price}"></h4>
+    <h4 th:text="${'category: ' + product.categoryTitle}"></h4>
+    <p></p>
+    <div class="btn-group" role="group" aria-label="btn_footer">
+<!--        <a href="/app/market-map" class="btn btn-outline-primary">market map</a>-->
+        <a href="/app/" class="btn btn-outline-primary">return to catalog</a>
+        <a href="/app/create-product" class="btn btn-outline-primary">add product to catalog</a>
+    </div>
+</div>
+</body>
+</html>

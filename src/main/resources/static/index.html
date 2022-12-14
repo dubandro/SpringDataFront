@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Main page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script src="index.js"></script>
+</head>
+<body ng-app="angular">
+    <div class="container" ng-controller="indexController">
+        <h2>catalog</h2>
+        <p></p>
+        <form class="row g-2">
+            <div class="col-auto">
+                <input type="number" ng-model="min" class="form-control" placeholder="min price">
+            </div>
+            <div class="col-auto">
+                <input type="number" ng-model="max" class="form-control" placeholder="max price">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-outline-primary" ng-click="minMaxValue(min, max)">find</button>
+            </div>
+        </form>
+        <table class="table align-middle table-hover">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>title</th>
+                <th>price</th>
+                <th>category</th>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="p in productList">
+                <td>{{p.id}}</td>
+                <td>
+                    <a href="/app/product/{{p.id}}" class="btn btn-link">{{p.title}}</a>
+                </td>
+                <td>
+                    <button class="btn btn-outline-primary" ng-click="changeValue(p.id, -1)">-</button>
+                    <span>{{p.price}}</span>
+                    <button class="btn btn-outline-primary" ng-click="changeValue(p.id, 1)">+</button>
+                </td>
+                <td>{{p.categoryTitle}}</td>
+                <td>
+                    <button class="btn btn-link" ng-click="deleteProduct(p.id)">delete</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <span>total products: {{size}}</span>
+        <p></p>
+        <div class="btn-group" role="group" aria-label="btn_footer">
+            <a href="/app/market-map" class="btn btn-outline-primary">market map</a>
+            <a href="/app/create-product" class="btn btn-outline-primary">add product to catalog</a>
+        </div>
+    </div>
+</body>
+</html>
