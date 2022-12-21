@@ -35,7 +35,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="p in productList">
+            <tr ng-repeat="p in productsPage.content">
                 <td>{{p.id}}</td>
                 <td>
                     <a href="/app/product/{{p.id}}" class="btn btn-link">{{p.title}}</a>
@@ -52,7 +52,14 @@
             </tr>
             </tbody>
         </table>
-        <span>total products: {{size}}</span>
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li class="page-item" ng-repeat="pageIndex in paginationArray">
+                    <button class="btn btn-link" ng-click="loadProducts(pageIndex)">{{pageIndex}}</button>
+                </li>
+            </ul>
+        </nav>
+        <span>total products: {{totalProducts}}</span>
         <p></p>
         <div class="btn-group" role="group" aria-label="btn_footer">
             <a href="/app/market-map" class="btn btn-outline-primary">market map</a>
