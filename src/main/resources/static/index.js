@@ -22,12 +22,12 @@ angular.module('angular', []).controller('indexController', function ($scope, $h
                 p: pageIndex
             }
         }).then(function (response) {
-            console.log(response.data);
+            // console.log(response.data);
             $scope.productsPage = response.data;
             $scope.paginationArray = $scope.generatePagesIndexes(1, $scope.productsPage.totalPages);
             $scope.totalProducts = $scope.productsPage.totalElements;
         });
-    };
+    }
 
     $scope.generatePagesIndexes = function (startPage, endPage) {
         let arr = [];
@@ -36,8 +36,6 @@ angular.module('angular', []).controller('indexController', function ($scope, $h
         }
         return arr;
     }
-
-    $scope.loadProducts();
 
     $scope.changeValue = function (productID, delta) {
         $http({
@@ -50,7 +48,7 @@ angular.module('angular', []).controller('indexController', function ($scope, $h
         }).then(function (){
             $scope.loadProducts();
         });
-    };
+    }
 
     $scope.deleteProduct = function (productID) {
         $http({
@@ -62,5 +60,65 @@ angular.module('angular', []).controller('indexController', function ($scope, $h
         }).then(function (){
             $scope.loadProducts();
         });
-    };
+    }
+
+//----- CART -----//
+    $scope.addToCart = function (productID) {
+        $http({
+            url: contextPath + '/cart/add/' + productID,
+            method: 'GET'
+        }).then(function () {
+            // alert('adding to cart successful');
+            $scope.loadCart();
+        });
+    }
+
+    $scope.loadCart = function () {
+        $http.get(contextPath + '/cart').then(function (response) {
+            // console.log(response.data);
+            $scope.cart = response.data;
+        });
+    }
+
+    $scope.clearCart = function () {
+        $http.get(contextPath + '/cart/clear').then(function () {
+            $scope.loadCart();
+        });
+    }
+
+    $scope.removeFromCart = function (productId) {
+        $http.get(contextPath + '/cart/delete/' + productId).then(function () {
+            $scope.loadCart();
+        });
+    }
+
+    $scope.changeQuantity = function (productID, delta) {
+        $http({
+            url: contextPath + '/cart/change',
+            method: 'GET',
+            params: {
+                id: productID,
+                delta: delta
+            }
+        }).then(function (){
+            $scope.loadCart();
+        });
+    }
+
+    $scope.createOrder = function () {
+        $http.get(contextPath + '/cart/order').then(function () {
+            $scope.loadCart();
+            $scope.loadOrders();
+        });
+    }
+
+    $scope.loadOrders = function () {
+        $http.get(contextPath + '/cart/order/all').then(function (response) {
+            $scope.orderList = response.data;
+        });
+    }
+
+    $scope.loadProducts();
+    $scope.loadCart();
+    $scope.loadOrders();
 });

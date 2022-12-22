@@ -1,3 +1,10 @@
+create table orders
+(
+    id          bigserial primary key,
+    created_at  timestamp default current_timestamp,
+    total_price decimal(10, 2)
+--     user_id     bigint not null references users (id)
+);
 create table categories
 (
     id    bigserial primary key,

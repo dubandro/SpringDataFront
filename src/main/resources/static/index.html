@@ -11,26 +11,37 @@
 </head>
 <body ng-app="angular">
     <div class="container" ng-controller="indexController">
-        <h2>catalog</h2>
+
         <p></p>
-        <form class="row g-2">
-            <div class="col-auto">
-                <input type="number" ng-model="min" class="form-control" placeholder="min price">
+        <div class="container px-4 text-center">
+            <div class="row gx-5">
+
+                <div class="col">
+                    <h2>catalog</h2>
+                </div>
+
+                <div class="col">
+                    <div class="btn-group" role="group" aria-label="btn_footer">
+                        <a href="/app/market-map" class="btn btn-outline-primary">market map</a>
+                        <a href="/app/create-product" class="btn btn-outline-primary">add product to catalog</a>
+<!--                        <a href="/app/cart" class="btn btn-outline-primary">cart</a>-->
+                    </div>
+                </div>
+
             </div>
-            <div class="col-auto">
-                <input type="number" ng-model="max" class="form-control" placeholder="max price">
-            </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-outline-primary" ng-click="minMaxValue(min, max)">find</button>
-            </div>
-        </form>
+        </div>
+        <p></p>
+
         <table class="table align-middle table-hover">
             <thead>
             <tr>
                 <th>id</th>
                 <th>title</th>
+                <th>down</th>
                 <th>price</th>
+                <th>up</th>
                 <th>category</th>
+                <td></td>
                 <td></td>
             </tr>
             </thead>
@@ -42,29 +53,156 @@
                 </td>
                 <td>
                     <button class="btn btn-outline-primary" ng-click="changeValue(p.id, -1)">-</button>
+                </td>
+                <td>
                     <span>{{p.price}}</span>
+                </td>
+                <td>
                     <button class="btn btn-outline-primary" ng-click="changeValue(p.id, 1)">+</button>
                 </td>
                 <td>{{p.categoryTitle}}</td>
                 <td>
-                    <button class="btn btn-link" ng-click="deleteProduct(p.id)">delete</button>
+                    <button class="btn btn-link" ng-click="deleteProduct(p.id)">delete from catalog</button>
+                </td>
+                <td>
+                    <button class="btn btn-link" ng-click="addToCart(p.id, 1)">add to cart</button>
                 </td>
             </tr>
             </tbody>
         </table>
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-                <li class="page-item" ng-repeat="pageIndex in paginationArray">
-                    <button class="btn btn-link" ng-click="loadProducts(pageIndex)">{{pageIndex}}</button>
-                </li>
-            </ul>
-        </nav>
-        <span>total products: {{totalProducts}}</span>
-        <p></p>
-        <div class="btn-group" role="group" aria-label="btn_footer">
-            <a href="/app/market-map" class="btn btn-outline-primary">market map</a>
-            <a href="/app/create-product" class="btn btn-outline-primary">add product to catalog</a>
+
+        <div class="container text-center">
+            <div class="row gx-7">
+                <div class="col">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <li class="page-item" ng-repeat="pageIndex in paginationArray">
+                                <button class="btn btn-link" ng-click="loadProducts(pageIndex)">{{pageIndex}}</button>
+                            </li>
+                            <li class="page-item">
+                                <label class="col-form-label">| total products: {{totalProducts}}</label>
+                            </li>
+                        </ul>
+
+                    </nav>
+                </div>
+
+                <div class="col">
+                    <form class="row g-3">
+                        <div class="col-auto">
+                            <input type="number" ng-model="min" class="form-control" placeholder="min price">
+                        </div>
+                        <div class="col-auto">
+                            <input type="number" ng-model="max" class="form-control" placeholder="max price">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-outline-primary" ng-click="minMaxValue(min, max)">find</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
         </div>
+
+        <!--cart-->
+        <p></p>
+        <div class="container px-4 text-center">
+            <div class="row gx-5">
+
+                <div class="col">
+                    <h2>cart</h2>
+                </div>
+
+                <div class="col">
+                    <div class="btn-group" role="group" aria-label="btn_footer">
+                        <button type="button" class="btn btn-success" ng-click="createOrder()">create order</button>
+                        <button type="button" class="btn btn-danger" ng-click="clearCart()">clear cart</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <p></p>
+
+        <table class="table align-middle table-hover">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>title</th>
+                <th>quantity</th>
+                <th>price</th>
+                <th>sum</th>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in cart.itemList">
+                <td>{{item.productId}}</td>
+                <td>
+                    <a href="/app/product/{{item.productId}}" class="btn btn-link">{{item.productTitle}}</a>
+                </td>
+                <td>
+                    <button class="btn btn-outline-primary" ng-click="changeQuantity(item.productId, -1)">-</button>
+                    <span>{{item.quantity}}</span>
+                    <button class="btn btn-outline-primary" ng-click="changeQuantity(item.productId, 1)">+</button>
+                </td>
+                <td>{{item.productPrice}}</td>
+                <td>{{item.itemTotalPrice}}</td>
+                <td>
+                    <button class="btn btn-link" ng-click="removeFromCart(item.productId)">delete from cart</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="container text-center">
+            <div class="row gx-7">
+                <div class="col">
+                    <label class="col-form-label">total positions: {{cart.itemList.length}}</label>
+                </div>
+                <div class="col">
+                    <label class="col-form-label">total price: {{cart.totalPrice}}</label>
+                </div>
+            </div>
+        </div>
+
+        <!--orders-->
+        <p></p>
+        <div class="container px-4 text-center">
+            <div class="row gx-5">
+
+                <div class="col">
+                    <h2>orders</h2>
+                </div>
+
+                <div class="col">
+                    <div class="btn-group" role="group" aria-label="btn_footer">
+                        <a href="/app/market-map" class="btn btn-outline-primary">market map</a>
+<!--                        <a href="/app/create-product" class="btn btn-outline-primary">add product to catalog</a>-->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <p></p>
+
+        <table class="table align-middle table-hover">
+            <thead>
+            <tr>
+                <th>order id</th>
+                <th>created at</th>
+                <th>total price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="order in orderList">
+                <td>{{order.id}}</td>
+                <td>{{order.createdAt}}</td>
+                <td>{{order.totalPrice}}</td>
+            </tr>
+            </tbody>
+        </table>
+
     </div>
 </body>
 </html>

@@ -29,7 +29,7 @@ public class ProductService {
         if (partTitle != null) {
             spec = spec.and(ProductSpecification.nameLike(partTitle));
         }
-        return productRepository.findAll(spec, PageRequest.of(pageIndex - 1, 10));
+        return productRepository.findAll(spec, PageRequest.of(pageIndex - 1, 6));
 //        return productRepository.findAll(PageRequest.of(pageIndex - 1, 10));
 
     }
