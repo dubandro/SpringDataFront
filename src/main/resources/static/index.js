@@ -46,7 +46,7 @@ angular.module('angular', []).controller('indexController', function ($scope, $h
                 delta: delta
             }
         }).then(function (){
-            $scope.loadProducts();
+            $scope.loadProducts(currentPageIndex);
         });
     }
 
@@ -58,7 +58,7 @@ angular.module('angular', []).controller('indexController', function ($scope, $h
                 id: productID
             }
         }).then(function (){
-            $scope.loadProducts();
+            $scope.loadProducts(currentPageIndex);
         });
     }
 

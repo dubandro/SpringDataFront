@@ -13,6 +13,8 @@ import ru.geekbrains.dubandro.SpringDataFront.model.Category;
 import ru.geekbrains.dubandro.SpringDataFront.model.Product;
 import ru.geekbrains.dubandro.SpringDataFront.services.CategoryService;
 import ru.geekbrains.dubandro.SpringDataFront.services.ProductService;
+import ru.geekbrains.dubandro.SpringDataFront.utils.UtilAspect;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class MainController {
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final UtilAspect utilAspect;
 
     @GetMapping("/products")
     @ResponseBody
@@ -85,6 +88,12 @@ public class MainController {
                 new ResourceNotFoundException("Product with id:" + id + " does not exist")));
         model.addAttribute("product", productDto);
         return "productPage";
+    }
+
+    @GetMapping("/statistics")
+    public String statistics(Model model) {
+        model.addAttribute("stat", utilAspect);
+        return "statistics";
     }
 
     /**
