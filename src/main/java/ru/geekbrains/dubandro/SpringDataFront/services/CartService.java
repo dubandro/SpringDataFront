@@ -44,7 +44,9 @@ public class CartService {
     }
 
     public void createOrder() {
-        orderService.createOrder(tempCart);
-        tempCart.clearCart();
+        if (tempCart.getTotalPrice() != 0) {
+            orderService.createOrder(tempCart);
+            tempCart.clearCart();
+        }
     }
 }
