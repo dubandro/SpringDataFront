@@ -1,30 +1,41 @@
 angular.module('angular', []).controller('indexController', function ($scope, $http) {
     const contextPath = 'http://localhost:8189/app';
 
-    let min, max;
+    let minPrice, maxPrice;
+    let currentPageIndex = 1;
 
-    $scope.minMaxValue = function (minPrice, maxPrice) {
+    $scope.minMaxValue = function (min, max) {
         // console.log(minPrice, maxPrice);
-        min = minPrice;
-        max = maxPrice;
+        minPrice = min;
+        maxPrice = max;
         $scope.loadProducts();
     }
 
-    $scope.loadProducts = function () {
+    $scope.loadProducts = function (pageIndex=1) {
+        currentPageIndex = pageIndex;
         $http({
             url: contextPath + '/products',
             method: 'GET',
             params: {
-                minPrice: min,
-                maxPrice: max
+                min: minPrice,
+                max: maxPrice,
+                p: pageIndex
             }
         }).then(function (response) {
-            $scope.productList = response.data;
-            $scope.size = response.data.length;
+            // console.log(response.data);
+            $scope.productsPage = response.data;
+            $scope.paginationArray = $scope.generatePagesIndexes(1, $scope.productsPage.totalPages);
+            $scope.totalProducts = $scope.productsPage.totalElements;
         });
-    };
+    }
 
-    $scope.loadProducts();
+    $scope.generatePagesIndexes = function (startPage, endPage) {
+        let arr = [];
+        for (let i = startPage; i < endPage + 1; i++) {
+            arr.push(i);
+        }
+        return arr;
+    }
 
     $scope.changeValue = function (productID, delta) {
         $http({
@@ -37,7 +48,7 @@ angular.module('angular', []).controller('indexController', function ($scope, $h
         }).then(function (){
             $scope.loadProducts();
         });
-    };
+    }
 
     $scope.deleteProduct = function (productID) {
         $http({
@@ -49,5 +60,65 @@ angular.module('angular', []).controller('indexController', function ($scope, $h
         }).then(function (){
             $scope.loadProducts();
         });
-    };
+    }
+
+//----- CART -----//
+    $scope.addToCart = function (productID) {
+        $http({
+            url: contextPath + '/cart/add/' + productID,
+            method: 'GET'
+        }).then(function () {
+            // alert('adding to cart successful');
+            $scope.loadCart();
+        });
+    }
+
+    $scope.loadCart = function () {
+        $http.get(contextPath + '/cart').then(function (response) {
+            // console.log(response.data);
+            $scope.cart = response.data;
+        });
+    }
+
+    $scope.clearCart = function () {
+        $http.get(contextPath + '/cart/clear').then(function () {
+            $scope.loadCart();
+        });
+    }
+
+    $scope.removeFromCart = function (productId) {
+        $http.get(contextPath + '/cart/delete/' + productId).then(function () {
+            $scope.loadCart();
+        });
+    }
+
+    $scope.changeQuantity = function (productID, delta) {
+        $http({
+            url: contextPath + '/cart/change',
+            method: 'GET',
+            params: {
+                id: productID,
+                delta: delta
+            }
+        }).then(function (){
+            $scope.loadCart();
+        });
+    }
+
+    $scope.createOrder = function () {
+        $http.get(contextPath + '/cart/order').then(function () {
+            $scope.loadCart();
+            $scope.loadOrders();
+        });
+    }
+
+    $scope.loadOrders = function () {
+        $http.get(contextPath + '/cart/order/all').then(function (response) {
+            $scope.orderList = response.data;
+        });
+    }
+
+    $scope.loadProducts();
+    $scope.loadCart();
+    $scope.loadOrders();
 });
